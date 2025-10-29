@@ -24,10 +24,13 @@ _ENV = environ['DJANGO_ENV']
 
 _base_settings = (
     'components/common.py',
+    'components/auth.py',
     'components/logging.py',
     'components/csp.py',
     'components/caches.py',
     'components/installed_apps.py',
+    'components/templates.py',
+    'components/api.py',
     # Select the right env:
     f'environments/{_ENV}.py',
     # Optionally override some settings:

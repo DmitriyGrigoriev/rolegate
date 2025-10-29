@@ -36,6 +36,8 @@ gunicorn = "^23.0"
 python-decouple = "^3.8"
 structlog = "^25.4"
 wheel = "^0.45"
+typing-extensions = "^4.15.0"
+djangorestframework = "^3.16.1"
 
 
 [tool.poetry.group.dev.dependencies]

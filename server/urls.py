@@ -17,6 +17,8 @@ from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
 from server.apps.main import urls as main_urls
+from server.apps.authentication import urls as auth_urls
+from server.apps.openapi import urls as openapi_urls
 from server.apps.main.views import index
 
 admin.autodiscover()
@@ -29,6 +31,8 @@ urlpatterns = [
     # django-admin:
     path('admin/doc/', include(admindocs_urls)),
     path('admin/', admin.site.urls),
+    path('api/', include(auth_urls)),
+    path('api/', include(openapi_urls)),
     # Text and xml static files:
     path(
         'robots.txt',

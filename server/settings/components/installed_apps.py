@@ -15,6 +15,9 @@ INSTALLED_APPS: Tuple[str, ...] = (
     'django.contrib.admin',
     'django.contrib.admindocs',
 
+    # Security:
+    'axes',
+
     # Health checks:
     # You may want to enable other checks as well,
     # see: https://github.com/KristianOellegaard/django-health-check
@@ -23,7 +26,13 @@ INSTALLED_APPS: Tuple[str, ...] = (
     'health_check.cache',
     'health_check.storage',
 
+    # Openapi doc
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+
     # REST
-    # 'rest_framework',
+    'rest_framework',
+    'server.apps.main',
+    'server.apps.authentication',
 
 )

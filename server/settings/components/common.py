@@ -17,31 +17,6 @@ from server.settings.components import BASE_DIR, config
 
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
-# Application definition:
-
-INSTALLED_APPS: tuple[str, ...] = (
-    # Your apps go here:
-    'server.apps.main',
-    # Default django apps:
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    # django-admin:
-    'django.contrib.admin',
-    'django.contrib.admindocs',
-    # Security:
-    'axes',
-    # Health checks:
-    # You may want to enable other checks as well,
-    # see: https://github.com/KristianOellegaard/django-health-check
-    'health_check',
-    'health_check.db',
-    'health_check.cache',
-    'health_check.storage',
-)
-
 MIDDLEWARE: tuple[str, ...] = (
     # Logging:
     'server.settings.components.logging.LoggingContextVarsMiddleware',
@@ -60,6 +35,8 @@ MIDDLEWARE: tuple[str, ...] = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Axes:
     'axes.middleware.AxesMiddleware',
+    # Custom authentication
+    'server.apps.authentication.middleware.JWTAuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'server.urls'

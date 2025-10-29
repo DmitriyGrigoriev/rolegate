@@ -13,12 +13,12 @@ from typing import TYPE_CHECKING
 from server.settings.components import config
 from server.settings.components.common import (
     DATABASES,
-    INSTALLED_APPS,
     MIDDLEWARE,
 )
+from server.settings.components.installed_apps import (
+    INSTALLED_APPS,
+)
 from server.settings.components.csp import (
-    CSP_CONNECT_SRC,
-    CSP_IMG_SRC,
     CSP_SCRIPT_SRC,
 )
 
@@ -88,7 +88,7 @@ INTERNAL_IPS += ['127.0.0.1', '10.0.2.2']
 
 def _custom_show_toolbar(request: HttpRequest) -> bool:
     """Only show the debug toolbar to users with the superuser flag."""
-    return DEBUG and request.user.is_superuser
+    return DEBUG and request.user if hasattr(request, 'user') else False
 
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -100,9 +100,6 @@ DEBUG_TOOLBAR_CONFIG = {
 # This will make debug toolbar to work with django-csp,
 # since `ddt` loads some scripts from `ajax.googleapis.com`:
 CSP_SCRIPT_SRC += ('ajax.googleapis.com',)
-CSP_IMG_SRC += ('data:',)
-CSP_CONNECT_SRC += ("'self'",)
-
 
 # django-zeal
 # https://github.com/taobojlen/django-zeal
