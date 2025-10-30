@@ -29,6 +29,7 @@ _base_settings = (
     'components/csp.py',
     'components/caches.py',
     'components/installed_apps.py',
+    'components/static.py',
     'components/templates.py',
     'components/api.py',
     'components/docs.py',
