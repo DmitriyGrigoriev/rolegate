@@ -4,16 +4,18 @@ Mock Views для демонстрации работы системы авто�
 Эти views не используют реальные модели БД, а возвращают тестовые данные,
 демонстрируя работу проверки прав доступа.
 """
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from .permissions import IsAuthenticated, HasResourcePermission
+from .serializers import MockProductSerializer, MockStoreSerializer, MockOrderSerializer
 
 
 class MockProduct:
     """Mock класс для продукта."""
-    
+
     def __init__(self, id, name, price, owner_id):
         self.id = id
         self.name = name
@@ -34,18 +36,19 @@ MOCK_PRODUCTS = [
 class MockProductViewSet(viewsets.ViewSet):
     """
     Mock ViewSet для продуктов.
-    
+
     Демонстрирует работу системы авторизации без реальной БД.
     """
-    
+
+    serializer_class = MockProductSerializer
     permission_classes = [IsAuthenticated, HasResourcePermission]
     resource_code = 'products'
     owner_field = 'owner'
-    
+
     def list(self, request):
         """
         Получение списка продуктов.
-        
+
         GET /api/mock/products/
         """
         # В реальном приложении здесь была бы фильтрация на основе прав
@@ -59,33 +62,33 @@ class MockProductViewSet(viewsets.ViewSet):
             }
             for p in MOCK_PRODUCTS
         ]
-        
+
         return Response({
             'count': len(products_data),
             'results': products_data,
         })
-    
+
     def retrieve(self, request, pk=None):
         """
         Получение детальной информации о продукте.
-        
+
         GET /api/mock/products/{id}/
         """
         product = next((p for p in MOCK_PRODUCTS if p.id == int(pk)), None)
-        
+
         if not product:
             return Response(
                 {'error': 'Продукт не найден'},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
         # Проверяем права на объект
         if not self.check_object_permission(request, product):
             return Response(
                 {'error': 'Недостаточно прав для доступа к этому продукту'},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         return Response({
             'id': product.id,
             'name': product.name,
@@ -93,22 +96,22 @@ class MockProductViewSet(viewsets.ViewSet):
             'owner_id': product.owner,
             'is_mine': product.owner == request.user.id,
         })
-    
+
     def create(self, request):
         """
         Создание нового продукта.
-        
+
         POST /api/mock/products/
         """
         name = request.data.get('name')
         price = request.data.get('price')
-        
+
         if not name or not price:
             return Response(
                 {'error': 'name и price обязательны'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         # В реальном приложении здесь было бы создание в БД
         new_id = max(p.id for p in MOCK_PRODUCTS) + 1
         new_product = {
@@ -118,7 +121,7 @@ class MockProductViewSet(viewsets.ViewSet):
             'owner_id': request.user.id,
             'is_mine': True,
         }
-        
+
         return Response(
             {
                 'message': 'Продукт успешно создан',
@@ -126,31 +129,31 @@ class MockProductViewSet(viewsets.ViewSet):
             },
             status=status.HTTP_201_CREATED,
         )
-    
+
     def update(self, request, pk=None):
         """
         Обновление продукта.
-        
+
         PUT /api/mock/products/{id}/
         """
         product = next((p for p in MOCK_PRODUCTS if p.id == int(pk)), None)
-        
+
         if not product:
             return Response(
                 {'error': 'Продукт не найден'},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
         # Проверяем права на объект
         if not self.check_object_permission(request, product):
             return Response(
                 {'error': 'Недостаточно прав для обновления этого продукта'},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         name = request.data.get('name', product.name)
         price = request.data.get('price', product.price)
-        
+
         return Response({
             'message': 'Продукт успешно обновлен',
             'product': {
@@ -161,40 +164,40 @@ class MockProductViewSet(viewsets.ViewSet):
                 'is_mine': product.owner == request.user.id,
             },
         })
-    
+
     def partial_update(self, request, pk=None):
         """
         Частичное обновление продукта.
-        
+
         PATCH /api/mock/products/{id}/
         """
         return self.update(request, pk)
-    
+
     def destroy(self, request, pk=None):
         """
         Удаление продукта.
-        
+
         DELETE /api/mock/products/{id}/
         """
         product = next((p for p in MOCK_PRODUCTS if p.id == int(pk)), None)
-        
+
         if not product:
             return Response(
                 {'error': 'Продукт не найден'},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
         # Проверяем права на объект
         if not self.check_object_permission(request, product):
             return Response(
                 {'error': 'Недостаточно прав для удаления этого продукта'},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         return Response({
             'message': 'Продукт успешно удален',
         })
-    
+
     def check_object_permission(self, request, obj):
         """Проверка прав на уровне объекта."""
         for permission in self.permission_classes:
@@ -215,11 +218,12 @@ MOCK_STORES = [
 
 class MockStoreViewSet(viewsets.ViewSet):
     """Mock ViewSet для магазинов."""
-    
+
+    serializer_class = MockStoreSerializer
     permission_classes = [IsAuthenticated, HasResourcePermission]
     resource_code = 'stores'
     owner_field = 'owner'
-    
+
     def list(self, request):
         """Список магазинов."""
         stores_data = [
@@ -227,7 +231,7 @@ class MockStoreViewSet(viewsets.ViewSet):
             for store in MOCK_STORES
         ]
         return Response({'count': len(stores_data), 'results': stores_data})
-    
+
     def retrieve(self, request, pk=None):
         """Детальная информация о магазине."""
         store = next((s for s in MOCK_STORES if s['id'] == int(pk)), None)
@@ -237,7 +241,7 @@ class MockStoreViewSet(viewsets.ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return Response({**store, 'is_mine': store['owner'] == request.user.id})
-    
+
     def create(self, request):
         """Создание магазина."""
         name = request.data.get('name')
@@ -270,11 +274,16 @@ MOCK_ORDERS = [
 
 class MockOrderViewSet(viewsets.ViewSet):
     """Mock ViewSet для заказов."""
-    
+
+    serializer_class = MockOrderSerializer
     permission_classes = [IsAuthenticated, HasResourcePermission]
     resource_code = 'orders'
     owner_field = 'owner'
-    
+
+    @extend_schema(
+        operation_id='mock_orders_list',
+        description='Get list of all orders'
+    )
     def list(self, request):
         """Список заказов."""
         orders_data = [
@@ -282,7 +291,11 @@ class MockOrderViewSet(viewsets.ViewSet):
             for order in MOCK_ORDERS
         ]
         return Response({'count': len(orders_data), 'results': orders_data})
-    
+
+    @extend_schema(
+        operation_id='mock_orders_detail',
+        description='Get specific order by ID'
+    )
     def retrieve(self, request, pk=None):
         """Детальная информация о заказе."""
         order = next((o for o in MOCK_ORDERS if o['id'] == int(pk)), None)
@@ -292,7 +305,7 @@ class MockOrderViewSet(viewsets.ViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return Response({**order, 'is_mine': order['owner'] == request.user.id})
-    
+
     def create(self, request):
         """Создание заказа."""
         product = request.data.get('product')

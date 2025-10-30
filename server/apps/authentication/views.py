@@ -2,7 +2,8 @@
 Views для API аутентификации и авторизации.
 """
 import jwt
-from drf_spectacular.utils import OpenApiExample, extend_schema, OpenApiResponse
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiExample, extend_schema, OpenApiResponse, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ from .serializers import (
     UserRoleSerializer,
     BusinessElementSerializer,
     AccessRuleSerializer,
-    RefreshTokenSerializer, TokenSerializer, LoginResponseSerializer,
+    RefreshTokenSerializer, TokenSerializer, LoginResponseSerializer, AuthSerializer,
 )
 from .permissions import IsAuthenticated, IsAdminRole, HasResourcePermission
 from .utils import (
@@ -33,6 +34,8 @@ from .utils import (
 
 class AuthViewSet(viewsets.ViewSet):
     """ViewSet для операций аутентификации."""
+
+    serializer_class = AuthSerializer
 
     @extend_schema(
         request=RegisterSerializer,
@@ -305,6 +308,16 @@ class UserViewSet(viewsets.ModelViewSet):
         """Получение queryset с prefetch для оптимизации."""
         return User.objects.prefetch_related('user_roles__role').all()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name='role_id',
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.PATH,
+                description='Role ID'
+            )
+        ]
+    )
     @action(detail=True, methods=['post'])
     def assign_role(self, request, pk=None):
         """
@@ -349,6 +362,16 @@ class UserViewSet(viewsets.ModelViewSet):
             'user_role': serializer.data,
         })
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name='role_id',
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.PATH,
+                description='Role ID'
+            )
+        ]
+    )
     @action(detail=True, methods=['delete'], url_path='roles/(?P<role_id>[^/.]+)')
     def revoke_role(self, request, pk=None, role_id=None):
         """

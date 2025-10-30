@@ -1,12 +1,14 @@
 """
 Сериализаторы для системы аутентификации и авторизации.
 """
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 
 from .models import User, Role, UserRole, BusinessElement, AccessRule
 
 
+@extend_schema_field(serializers.ListField(child=serializers.DictField()))
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели пользователя."""
 
@@ -29,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
 
+    @extend_schema_field(serializers.IntegerField())
     def get_roles(self, obj):
         """Получение ролей пользователя."""
         return [
@@ -158,6 +161,7 @@ class RoleSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at']
 
+    @extend_schema_field(serializers.IntegerField())
     def get_users_count(self, obj):
         """Количество пользователей с этой ролью."""
         return obj.user_roles.count()
@@ -206,6 +210,7 @@ class BusinessElementSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at']
 
+    @extend_schema_field(serializers.IntegerField())
     def get_rules_count(self, obj):
         """Количество правил доступа к этому элементу."""
         return obj.access_rules.count()
@@ -255,6 +260,7 @@ class TokenSerializer(serializers.Serializer):
         help_text='Тип токена'
     )
 
+
 class RefreshTokenSerializer(serializers.Serializer):
     """Сериализатор для обновления токена."""
 
@@ -267,3 +273,39 @@ class LoginResponseSerializer(serializers.Serializer):
     message = serializers.CharField(default='Успешный вход')
     user = UserSerializer()
     tokens = TokenSerializer()
+
+
+class MockProductSerializer(serializers.Serializer):
+    """Сериализатор для mock продукта."""
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    owner_id = serializers.IntegerField()
+    is_mine = serializers.BooleanField()
+
+
+class MockStoreSerializer(serializers.Serializer):
+    """Сериализатор для mock магазина."""
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    address = serializers.CharField()
+    owner = serializers.IntegerField()
+    is_mine = serializers.BooleanField()
+
+
+class MockOrderSerializer(serializers.Serializer):
+    """Сериализатор для mock заказа."""
+    id = serializers.IntegerField()
+    product = serializers.CharField()
+    quantity = serializers.IntegerField()
+    total = serializers.DecimalField(max_digits=10, decimal_places=2)
+    owner = serializers.IntegerField()
+    is_mine = serializers.BooleanField()
+
+
+class AuthSerializer(serializers.Serializer):
+    """
+    Пустой сериализатор для AuthViewSet.
+    Каждый action использует свой специфический сериализатор.
+    """
+    pass

@@ -47,6 +47,14 @@ bcrypt = "^5.0.0"
 drf-spectacular = "^0.28.0"
 django-filter = "^25.2"
 drf-spectacular-sidecar = "^2025.10.1"
+django-docs = "^0.3.3"
+sphinx = "^8.2.3"
+sphinx-autodoc-typehints = "^3.5.2"
+sphinx-togglebutton = "^0.3.2"
+sphinx-intl = "^2.3.2"
+sphinx-rtd-theme = "^3.0.2"
+tomli = "^2.3.0"
+myst-parser = "^4.0.1"
 
 
 [tool.poetry.group.dev.dependencies]

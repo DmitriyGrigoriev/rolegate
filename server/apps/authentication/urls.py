@@ -13,7 +13,6 @@ from .views import (
 )
 from .mock_views import MockProductViewSet, MockStoreViewSet, MockOrderViewSet
 
-
 # Создаем router для ViewSets
 router = DefaultRouter()
 
@@ -27,7 +26,6 @@ router.register(r'access-rules', AccessRuleViewSet, basename='access-rule')
 router.register(r'mock/products', MockProductViewSet, basename='mock-product')
 router.register(r'mock/stores', MockStoreViewSet, basename='mock-store')
 router.register(r'mock/orders', MockOrderViewSet, basename='mock-order')
-
 
 # URL patterns для auth endpoints
 auth_patterns = [
@@ -43,10 +41,10 @@ auth_patterns = [
     }), name='auth-me'),
 ]
 
-
 app_name = 'authentication'
 
 urlpatterns = [
     path('auth/', include(auth_patterns)),
     path('', include(router.urls)),
+    # path('', include(mock_patterns)),
 ]
