@@ -9,4 +9,9 @@ def index(request: HttpRequest) -> HttpResponse:
     Returns rendered default page to the user.
     Typed with the help of ``django-stubs`` project.
     """
-    return render(request, 'main/index.html')
+    from django.conf import settings
+    
+    context = {
+        'debug': settings.DEBUG,
+    }
+    return render(request, 'main/index.html', context)

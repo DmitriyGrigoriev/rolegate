@@ -1,29 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 60px 80px;
+  max-width: 600px;
+  width: 100%;
   text-align: center;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+h1 {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-weight: 700;
 }
 
-.wemake-services-body {
-  height: 95vh;
+.subtitle {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+}
+
+.links {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
 }
 
-.wemake-services-logo {
-  max-width: 250px;
-  margin: 0 auto;
+.link-card {
+  display: block;
+  padding: 25px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
-.github-corner img {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: 0;
+.link-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.link-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.link-card p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.debug-only {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+.debug-only:hover {
+  box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 40px 30px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
 }
