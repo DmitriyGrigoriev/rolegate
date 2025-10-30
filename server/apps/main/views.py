@@ -7,10 +7,9 @@ def index(request: HttpRequest) -> HttpResponse:
     Main (or index) view.
 
     Returns rendered default page to the user.
-    Typed with the help of ``django-stubs`` project.
     """
     from django.conf import settings
-    
+
     context = {
         'debug': settings.DEBUG,
     }

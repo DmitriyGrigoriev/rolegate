@@ -10,7 +10,7 @@
 
 ## Предварительные требования
 
-Вам понадобятся:
+Вам понадобится:
 
 - `python3.11` (see `pyproject.toml` for exact version), use `pyenv install`
 - `postgresql` (see `docker-compose.yml` for exact version)
