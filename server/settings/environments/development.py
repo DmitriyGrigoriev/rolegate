@@ -38,8 +38,6 @@ ALLOWED_HOSTS = [
     '[::1]',
 ]
 
-
-
 # Installed apps for development only:
 
 INSTALLED_APPS += (
@@ -62,8 +60,11 @@ INSTALLED_APPS += (
     'query_counter',
     # django-drifter:
     'drifter',
+    # Документация - только для development
+    'docs',
 )
 
+DOCS_ACCESS = 'public'
 
 # Django debug toolbar:
 # https://django-debug-toolbar.readthedocs.io
@@ -115,13 +116,11 @@ ZEAL_ALLOWLIST = [
     {'model': 'admin.*'},
 ]
 
-
 # django-test-migrations
 # https://github.com/wemake-services/django-test-migrations
 
 # Set of badly named migrations to ignore:
 DTM_IGNORED_MIGRATIONS = frozenset((('axes', '*'),))
-
 
 # django-migration-linter
 # https://github.com/3YOURMIND/django-migration-linter
@@ -131,7 +130,6 @@ MIGRATION_LINTER_OPTIONS = {
     'exclude_migration_tests': ['CREATE_INDEX', 'CREATE_INDEX_EXCLUSIVE'],
     'warnings_as_errors': True,
 }
-
 
 # django-extra-checks
 # https://github.com/kalekseev/django-extra-checks

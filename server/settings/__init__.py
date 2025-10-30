@@ -31,6 +31,7 @@ _base_settings = (
     'components/installed_apps.py',
     'components/templates.py',
     'components/api.py',
+    'components/docs.py',
     # Select the right env:
     f'environments/{_ENV}.py',
     # Optionally override some settings:

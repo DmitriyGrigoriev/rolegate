@@ -20,6 +20,7 @@ from server.apps.main import urls as main_urls
 from server.apps.authentication import urls as auth_urls
 from server.apps.openapi import urls as openapi_urls
 from server.apps.main.views import index
+from server.settings.components import config
 
 admin.autodiscover()
 
@@ -52,14 +53,15 @@ urlpatterns = [
     path('', index, name='index'),
 ]
 
-if settings.DEBUG:  # pragma: no cover
-    import debug_toolbar
-    from django.conf.urls.static import static
+# Документация Sphinx - только в development режиме
+if config('DJANGO_ENV') == 'development':
+    import debug_toolbar  # noqa: WPS433
+    urlpatterns += [
+        path('sphinx/', include('docs.urls')),
+    ]
 
     urlpatterns = [
         # URLs specific only to django-debug-toolbar:
         path('__debug__/', include(debug_toolbar.urls)),
         *urlpatterns,
-        # Serving media files in development only:
-        *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     ]
