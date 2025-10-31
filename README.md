@@ -69,6 +69,43 @@
 
 #### 1. Модуль аутентификации
 
+**`users`** — Пользователи системы
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,  -- bcrypt hash
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    middle_name VARCHAR(100),
+    is_active BOOLEAN DEFAULT TRUE,  -- для мягкого удаления
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**`sessions`** — Активные сессии пользователей
+```sql
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    token TEXT NOT NULL,              -- JWT токен
+    expires_at TIMESTAMP NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,   -- для инвалидации токена
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Принцип работы аутентификации:**
+- При login создается JWT токен содержащий `user_id` и `exp` (время истечения)
+- Токен сохраняется в таблице `sessions`
+- Клиент отправляет токен в заголовке: `Authorization: Bearer {token}`
+- Middleware проверяет:
+  1. Валидность JWT (подпись, срок действия)
+  2. Наличие активной сессии в БД
+  3. `is_active=True` для пользователя
+- При logout сессия помечается как `is_active=False`
+
 ```python
 class JWTAuthentication(authentication.BaseAuthentication):
     """
@@ -172,43 +209,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
         """
         return self.keyword
 ```
-
-**`users`** — Пользователи системы
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,  -- bcrypt hash
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    middle_name VARCHAR(100),
-    is_active BOOLEAN DEFAULT TRUE,  -- для мягкого удаления
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-**`sessions`** — Активные сессии пользователей
-```sql
-CREATE TABLE sessions (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    token TEXT NOT NULL,              -- JWT токен
-    expires_at TIMESTAMP NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,   -- для инвалидации токена
-    created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-**Принцип работы аутентификации:**
-- При login создается JWT токен содержащий `user_id` и `exp` (время истечения)
-- Токен сохраняется в таблице `sessions`
-- Клиент отправляет токен в заголовке: `Authorization: Bearer {token}`
-- Middleware проверяет:
-  1. Валидность JWT (подпись, срок действия)
-  2. Наличие активной сессии в БД
-  3. `is_active=True` для пользователя
-- При logout сессия помечается как `is_active=False`
 
 #### 2. Модуль авторизации (RBAC)
 
