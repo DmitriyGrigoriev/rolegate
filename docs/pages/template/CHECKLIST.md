@@ -47,6 +47,12 @@ python manage.py migrate
 python manage.py init_auth_system
 ```
 
+### Статические файлы
+
+```bash
+python manage.py collectstatic -y
+```
+
 Эта команда создаст:
 - ✅ 4 роли (admin, manager, user, guest)
 - ✅ 5 бизнес-элементов (users, products, stores, orders, access_rules)

@@ -27,7 +27,7 @@
 
 Для начала работы с системой аутентификации выполните следующие шаги:
 
-**Установка зависимостей**::
+**Установка зависимостей**:
 
   # Установка Poetry (если еще не установлен)
   curl -sSL https://install.python-poetry.org | python3 -
@@ -45,15 +45,19 @@
   cd docs
   make clean && make html
 
-**Применение миграций**::
+**Применение миграций**:
 
     python manage.py migrate
 
-**Инициализация системы**::
+**Статические файлы**:
+
+    python manage.py collectstatic -y
+
+**Инициализация системы**:
 
     python manage.py init_auth_system
 
-**Запуск сервера**::
+**Запуск сервера**:
 
     python manage.py runserver
 
