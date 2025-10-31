@@ -8,10 +8,9 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # используем кастомный middleware
+        # Custom JWT Authentication Middleware
+        'server.apps.authentication.authentication.JWTAuthentication',
     ],
-    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    # "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
     "DEFAULT_VERSION": "v1.0",
     "ALLOWED_VERSION": {'v1.0'},
     "VERSION_PARAM": "version",

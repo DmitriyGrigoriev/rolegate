@@ -34,6 +34,14 @@ JWT_ACCESS_TOKEN_LIFETIME = 15  # минуты
 JWT_REFRESH_TOKEN_LIFETIME = 7  # дни
 ```
 
+#### Настройка .env
+`config/.env`
+```python
+POSTGRES_DB=rolegate
+POSTGRES_USER=rolegate
+POSTGRES_PASSWORD=rolegate
+```
+
 ### Применение миграций:
 
 ```bash
@@ -50,7 +58,7 @@ python manage.py init_auth_system
 ### Статические файлы
 
 ```bash
-python manage.py collectstatic -y
+python manage.py collectstatic --clear
 ```
 
 Эта команда создаст:
@@ -64,7 +72,7 @@ python manage.py collectstatic -y
 ### Запуск сервера
 
 ```bash
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
 
 ### Тестирование

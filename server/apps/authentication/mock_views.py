@@ -7,7 +7,6 @@ Mock Views для демонстрации работы системы авто�
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import action
 
 from .permissions import IsAuthenticated, HasResourcePermission
 from .serializers import MockProductSerializer, MockStoreSerializer, MockOrderSerializer

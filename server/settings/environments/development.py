@@ -106,7 +106,7 @@ CSP_SCRIPT_SRC += ('ajax.googleapis.com',)
 # https://github.com/taobojlen/django-zeal
 
 # Should be the first in line:
-MIDDLEWARE = ('zeal.middleware.zeal_middleware', *MIDDLEWARE)
+# MIDDLEWARE = ('zeal.middleware.zeal_middleware', *MIDDLEWARE)
 
 # Logging N+1 requests:
 ZEAL_RAISE = True  # comment out if you want to allow N+1 requests

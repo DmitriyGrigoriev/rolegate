@@ -35,8 +35,6 @@ MIDDLEWARE: tuple[str, ...] = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Axes:
     'axes.middleware.AxesMiddleware',
-    # Custom authentication
-    'server.apps.authentication.middleware.JWTAuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'server.urls'

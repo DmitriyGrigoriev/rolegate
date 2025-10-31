@@ -45,13 +45,19 @@
   cd docs
   make clean && make html
 
+**Настройте .env**:
+
+  POSTGRES_DB=rolegate
+  POSTGRES_USER=rolegate
+  POSTGRES_PASSWORD=rolegate
+
 **Применение миграций**:
 
     python manage.py migrate
 
 **Статические файлы**:
 
-    python manage.py collectstatic -y
+    python manage.py collectstatic --clear
 
 **Инициализация системы**:
 
@@ -59,7 +65,7 @@
 
 **Запуск сервера**:
 
-    python manage.py runserver
+    python manage.py runserver 0.0.0.0:8000
 
 Тестовые данные
 ---------------
